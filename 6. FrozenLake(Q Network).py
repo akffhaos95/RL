@@ -51,8 +51,6 @@ with tf.compat.v1.Session() as sess:
             sess.run(train, feed_dict = {X: one_hot(s), Y: Qs})
             rAll += reward
             s = s1
-            if reward==1.0:
-                print(reward)
         rList.append(rAll)
 
 print("Percent of successful episodes: " + str(sum(rList)/num_episodes) + "%")
