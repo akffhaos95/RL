@@ -11,7 +11,7 @@ class _Getch:
             ch = sys.stdin.read(3)
         finally:
             termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
-	    return ch
+            return ch
 
 inkey = _Getch()
 
@@ -22,9 +22,9 @@ UP = 3
 
 arrow_keys = {
     '\x1b[A' : UP,
-    '\x1b[B' : LEFT,
-    '\x1b[C' : DOWN,
-    '\x1b[D' : RIGHT
+    '\x1b[B' : DOWN,
+    '\x1b[C' : RIGHT,
+    '\x1b[D' : LEFT
 }
 
 register(
@@ -47,8 +47,7 @@ while True:
 
     action = arrow_keys[key]
     state, reward, done, info = env.step(action)
-    env.render() #현재 상태
-
+    env.render()
     print("state : {0}, action : {1}, reward : {2}, info : {3}".format(state, action,reward,info))
     if done:
         print("Finished with reward {0}".format(reward))

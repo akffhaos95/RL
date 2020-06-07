@@ -10,15 +10,15 @@ learning_rate = 1e-1
 input_size = env.observation_space.shape[0]
 output_size = env.action_space.n
 
-X = tf.compat.v1.placeholder(tf.float32, [None, input_size], name = "input_x")
-W1 = tf.compat.v1.get_variable("W1", shape = [input_size, output_size],
-                               initializer = tf.keras.initializers.GlorotNormal)
+X = tf.compat.v1.placeholder(tf.float32, [None, input_size], name="input_x")
+W1 = tf.compat.v1.get_variable("W1", shape=[input_size, output_size],
+                               initializer=tf.keras.initializers.glorot_normal)
 Qpred = tf.compat.v1.matmul(X, W1)
 
-Y = tf.compat.v1.placeholder(shape = [None, output_size], dtype = tf.float32)
+Y = tf.compat.v1.placeholder(shape=[None, output_size], dtype=tf.float32)
 
 loss = tf.compat.v1.reduce_sum(tf.compat.v1.square(Y - Qpred))
-train = tf.compat.v1.train.AdamOptimizer(learning_rate = learning_rate).minimize(loss)
+train = tf.compat.v1.train.AdamOptimizer(learning_rate=learning_rate).minimize(loss)
 
 num_episodes = 2000
 dis = 0.9
@@ -27,7 +27,6 @@ rList = []
 with tf.compat.v1.Session() as sess:
     sess.run(tf.compat.v1.global_variables_initializer())
     for i in range(num_episodes):
-        e = 1./ ((i/10) + 1)
         rAll = 0
         step_count = 0
         s = env.reset()
@@ -36,7 +35,7 @@ with tf.compat.v1.Session() as sess:
         while not done:
             step_count += 1
             x = np.reshape(s, [1, input_size])
-            Qs = sess.run(Qpred, feed_dict = {X : x})
+            Qs = sess.run(Qpred, feed_dict={X: x})
             if np.random.rand(1) < e:
                 a = env.action_space.sample()
             else:
@@ -46,10 +45,10 @@ with tf.compat.v1.Session() as sess:
             if done:
                 Qs[0, a] = -100
             else:
-                Qs1 = sess.run(Qpred, feed_dict = {X : x})
+                Qs1 = sess.run(Qpred, feed_dict={X: x})
                 Qs[0, a] = reward + dis * np.max(Qs1)
 
-            sess.run(train, feed_dict = {X: x, Y : Qs})
+            sess.run(train, feed_dict={X: x, Y: Qs})
             s = s1
         rList.append(step_count)
         print("Episodes: {} steps: {}".format(i, step_count))
@@ -63,7 +62,7 @@ with tf.compat.v1.Session() as sess:
         env.render()
 
         x = np.reshape(observation, [1, input_size])
-        Qs = sess.run(Qpred, feed_dict = {X : x})
+        Qs = sess.run(Qpred, feed_dict={X: x})
         a = np.argmax(Qs)
 
         observation, reward, done, _ = env.step(a)
