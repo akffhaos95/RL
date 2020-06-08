@@ -49,7 +49,7 @@ def bot_play(mainDQN):
             break
 
 def main():
-    max_episodes = 500
+    max_episodes = 1000
     replay_buffer = deque()
     with tf.compat.v1.Session() as sess:
         mainDQN = DQN.DQN(sess, input_size, output_size, name="main")
