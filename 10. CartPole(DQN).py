@@ -88,6 +88,7 @@ def main():
                     minibatch = random.sample(replay_buffer, 10)
                     loss, _ = replay_train(mainDQN, targetDQN, minibatch)
                 print("Loss : ", loss)
+                bot_play(mainDQN)
                 sess.run(copy_ops)
         bot_play(mainDQN)
 

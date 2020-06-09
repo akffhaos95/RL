@@ -1,23 +1,6 @@
 import gym
 from gym.envs.registration import register
-import msvcrt #Windows 키 입력
-
-class _Getch:
-    def __call__(self):
-        return msvcrt.getch()
-inkey = _Getch()
-
-LEFT = 0
-DOWN = 1
-RIGHT = 2
-UP = 3
-
-arrow_keys = {
-    b'w' : UP,
-    b'a' : LEFT,
-    b's' : DOWN,
-    b'd' : RIGHT
-}
+import _Getch
 
 register(
     id = 'FrozenLake-v3',
@@ -32,12 +15,12 @@ env = gym.make('FrozenLake-v3')
 env.render()
 
 while True:
-    key = inkey()
-    if key not in arrow_keys.keys():
+    key = _Getch.inkey()
+    if key not in _Getch.arrow_keys.keys():
         print("Gema Aborted!")
         break
 
-    action = arrow_keys[key]
+    action = _Getch.arrow_keys[key]
     state, reward, done, info = env.step(action)
     env.render() #현재 상태
 
